@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- title -->
+
+
+
+
+<!-- keywords -->
+
+
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" >
+    <meta name="author" content="Artist">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="Artist">
+    
+    <meta name="keywords" content="hexo,hexo-theme,hexo-blog">
+    
+    <meta name="description" content="">
+    <meta name="description" content="Lab1 RecursionSubject1. Solve the hanoi problem with recursionIntroductionWrite a recursive program to solve the Hanoi problem, output the procedure of movementsof the disks. Algorithms SpecificationH">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Data Structure">
+<meta property="og:url" content="rainartist.top/2020/10/15/Data-Structure/index.html">
+<meta property="og:site_name" content="RainArtist">
+<meta property="og:description" content="Lab1 RecursionSubject1. Solve the hanoi problem with recursionIntroductionWrite a recursive program to solve the Hanoi problem, output the procedure of movementsof the disks. Algorithms SpecificationH">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="/2020/10/15/Data-Structure/1.PNG">
+<meta property="og:image" content="/2020/10/15/Data-Structure/2.PNG">
+<meta property="og:image" content="/2020/10/15/Data-Structure/3.PNG">
+<meta property="og:image" content="/2020/10/15/Data-Structure/4.PNG">
+<meta property="article:published_time" content="2020-10-15T03:56:57.000Z">
+<meta property="article:modified_time" content="2020-10-15T05:34:37.469Z">
+<meta property="article:author" content="Artist">
+<meta property="article:tag" content="Algorithm">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="/2020/10/15/Data-Structure/1.PNG">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    
+    <title>Data Structure · Artist&#39;s Dream</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href= "/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <link rel="stylesheet" href= "/css/mobile.css?v=20180824" media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href= "/assets/favicon.ico" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script" />
+    <link rel="preload" href="/scripts/main.js" as="script" />
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+<meta name="generator" content="Hexo 5.0.2"></head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >Artist&#39;s Dream in the Rain.</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">Data Structure</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>Artist's Dream in the Rain.</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style="
+
+
+
+
+
+
+
+height:50vh;
+">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            Data Structure
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Algorithm">Algorithm</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>Word count: <span class="post-count word-count">584</span>Reading time: <span class="post-count reading-time">3 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2020/10/15</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h1 id="Lab1-Recursion"><a href="#Lab1-Recursion" class="headerlink" title="Lab1 Recursion"></a>Lab1 Recursion</h1><h2 id="Subject1-Solve-the-hanoi-problem-with-recursion"><a href="#Subject1-Solve-the-hanoi-problem-with-recursion" class="headerlink" title="Subject1. Solve the hanoi problem with recursion"></a>Subject1. Solve the hanoi problem with recursion</h2><h3 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h3><p>Write a recursive program to solve the Hanoi problem, output the procedure of movements<br>of the disks.</p>
+<h3 id="Algorithms-Specification"><a href="#Algorithms-Specification" class="headerlink" title="Algorithms Specification"></a>Algorithms Specification</h3><p>Hanoi is a classic problem of recursion algorithm, which can be easily divided into smaller tasks to be solved.</p>
+<p>I wrote a function called Hanoi, which handles the situation when there are n disks need to be move.</p>
+<p>When the function is handling only 1 disk, then it is obvious that just move the disk from needle A to C.</p>
+<p>Otherwise, we break the task into two smaller pieces, which handle scale of n-1 disks respectively.</p>
+<p>There is no specific data structure used.</p>
+<h3 id="Test-results"><a href="#Test-results" class="headerlink" title="Test results"></a>Test results</h3><ul>
+<li>input n=5</li>
+</ul>
+<p>This implies that there are 5 disks need to be moved initially.</p>
+<p>The output is:</p>
+<div style="height:20%;width:50%;margin:auto"><img src="/2020/10/15/Data-Structure/1.PNG" class="" title="output"></div>
+
+<p>which is defintely correct.</p>
+<ul>
+<li>input n=0</li>
+</ul>
+<p>There is no output, and the program reach its end.</p>
+<p>Which means the input is invalid.</p>
+<h3 id="Analysis-and-Comments"><a href="#Analysis-and-Comments" class="headerlink" title="Analysis and Comments"></a>Analysis and Comments</h3><p>Time complexity:</p>
+<p>$T(n)=2\times T(n-1)+1$<br>$=2\times (2\times T(n-2)+1)+1$<br>$=2^{2}\times T(n-2)+1+2^{1}$<br>$…$<br>$=2^{k}\times T(1)+1+2^{1}+…+2^{k-1}$<br>$=O(2^k)+O(2^k)$<br>$=O(2^k)$<br>and we know, $k=n-1$.<br>Therefore, time complexity is $O(2^n)$</p>
+<p>Space complexity:</p>
+<p>This requires space for saving the recursions.</p>
+<p>Therefore, the time complexity and space complexity are both large. However, for this problem, we cannot get more time efficient algorithm since the requirement is output the total moves and the number of moves is $O(2^n)$.</p>
+<h3 id="Source-code"><a href="#Source-code" class="headerlink" title="Source code"></a>Source code</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;stdio.h&gt;</span><br><span class="line"></span><br><span class="line">void Hanoi(int n,char a,char b,char c)&#123; &#x2F;&#x2F;the hanoi function</span><br><span class="line">    if(n&lt;1) return; &#x2F;&#x2F;when the input is invalid, just return</span><br><span class="line">    if(n&#x3D;&#x3D;1) printf(&quot;Move the %dth disk from %c to %c\n&quot;,n,a,c); &#x2F;&#x2F;when there is just one disk, move it from A to C</span><br><span class="line">    else &#123;</span><br><span class="line">        Hanoi(n-1,a,c,b); &#x2F;&#x2F;recursive step: using C</span><br><span class="line">        printf(&quot;Move the %dth disk from %c to %c\n&quot;,n,a,c); &#x2F;&#x2F;move the bottom disk from A to C</span><br><span class="line">        Hanoi(n-1,b,a,c); &#x2F;&#x2F;recursive step: using A</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main()&#123;</span><br><span class="line">    puts(&quot;Please input the number of disk(s):&quot;);</span><br><span class="line">    int n;scanf(&quot;%d&quot;,&amp;n);</span><br><span class="line">    Hanoi(n,&#39;A&#39;,&#39;B&#39;,&#39;C&#39;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="Subject2-The-problem-of-finding-the-paths-and-the-number-of-paths"><a href="#Subject2-The-problem-of-finding-the-paths-and-the-number-of-paths" class="headerlink" title="Subject2. The problem of finding the paths and the number of paths"></a>Subject2. The problem of finding the paths and the number of paths</h2><h3 id="Introduction-1"><a href="#Introduction-1" class="headerlink" title="Introduction"></a>Introduction</h3><p>Given a $m$ by $n$ grid as shown in the following figure (in the figure $m=2$ and $n=5$).</p>
+<p>Suppose there is a robot at the upper left corner (with the coordinate (m,n)) and the robot can only take one step to the right or down at a time, the questions are:</p>
+<div style="width:50%;margin:auto"><img src="/2020/10/15/Data-Structure/2.PNG" class="" title="robot"></div>
+
+
+<ol>
+<li>how many paths are there for the robot to reach the lower right corner (with the<br>coordinate (1,1))</li>
+<li>output the paths. </li>
+</ol>
+<h3 id="Algorithms-Specification-1"><a href="#Algorithms-Specification-1" class="headerlink" title="Algorithms Specification"></a>Algorithms Specification</h3><p>The number of paths can be obtained in two different ways:</p>
+<ol>
+<li>Since the robot can only walk in two directions, the number of steps to the destination is a constant then, which equals to $m+n-2$. Therefore, we choose $m-1$ steps from the total steps to walk downwards, which is simply $\tbinom{m+n-2}{m-1}$.</li>
+<li>the other way to obtain the number of ways is using recursion. </li>
+</ol>
+<script type="math/tex; mode=display">f(m,n)=
+\begin{cases}
+0& \text{m<0||n<0}\\
+1& \text{m=1&&n=1}\\
+f(m-1,n)+f(m,n-1)& \text{otherwise}
+\end{cases}</script><p>For the part of finding the exact steps, we can simply write one function of DFS while using an array to record the steps. The DFS (i.e.recursion) stops at (1,1), which is the destination. When we reach the destination, print the array.</p>
+<p>To record the steps, I use a struct data type named PathType.</p>
+<h3 id="Test-results-1"><a href="#Test-results-1" class="headerlink" title="Test results"></a>Test results</h3><ul>
+<li>input: 5 2</li>
+</ul>
+<div style="width:50%;margin:auto"><img src="/2020/10/15/Data-Structure/3.PNG" class="" title="result"></div>
+
+<p>Input the sample input of the question to test. The answer is correct.</p>
+<ul>
+<li>input: -4 -4</li>
+</ul>
+<div style="width:70%;margin:auto"><img src="/2020/10/15/Data-Structure/4.PNG" class="" title="result"></div>
+
+<p>Input an invalid input to test if it will fall into an infinite loop. The result seems everything is fine.</p>
+<h3 id="Analysis-and-Comments-1"><a href="#Analysis-and-Comments-1" class="headerlink" title="Analysis and Comments"></a>Analysis and Comments</h3><p>Time complexity:</p>
+<ul>
+<li>pathnum</li>
+</ul>
+<p>Pathnum uses combination to calculate the number of paths, since it needs to calculate factorial. The easier way to calculate factorial is simply one while loop or recursion, since it is always better to use while loop then recursion to save the space, we choose while loop, which requires $O(n)$.<br>Actually, there is another way to calculate factorial, that is, using the decomposition of <strong>Number Theory</strong>. The factorial can be expressed as a product of primes with specific powers.</p>
+<script type="math/tex; mode=display">n!=\prod_{p<=n}p^{\sum_{r=1}^{\infty}\left[ \frac{n}{p^r}\right]}</script><p>This requires $O(n)$ time for computing the primes using <strong>Linear Sieve</strong>.</p>
+<ul>
+<li>pathnum2</li>
+</ul>
+<p>Pathnum2 uses recursion to calculate the number of paths, the time complexity is roughly $O(2^{n+m})$.</p>
+<p>Prove:<br>From the recursion step we obtain that<br>$T(f(m,n))=T(f(m-1,n))+T(f(m,n-1))+1$</p>
+<p>Since the $m$ and $n$ have no difference, that is, the effect of the two variables is axial symmetry. We know that the path derived from f(m,n) and f(n,m) is axial symmetry. Therefore, as long as the sum of $m$ and $n$ is constant, the number of paths along to the destination is the same.</p>
+<p>So we obtain that $T(f(m,n))=T(f(n,m))$ for any $m$ and $n$.</p>
+<p>$T(f(m,n))$<br>$=T(f(m-1,n))+T(f(m,n-1))+C$<br>$=2\times T(f(m-1,n))+C$<br>$=2\times (2\times T(f(m-2,n))+C)+C$<br>$=2^2 \times T(f(m-2,n))+2\times C+C$<br>$…$<br>$=2^{m-1} \times T(f(1,n))+C+2\times C+2^2\times C+…+2^{m-2}\times C$<br>$=2^{m}\times T(f(1,n-1))+C+2\times C+2^2\times C+…+2^{m-1}\times C$<br>$…$<br>$=2^{m+n-2}\times T(f(1,1))+C+2\times C+2^2\times C+…+2^{m+n-3}\times C$<br>$=2^{m+n-2}\times C +\frac{1\times(1-2^{m+n-2})}{1-2}\times C$<br>$=(2^{m+n-1}-1)\times C$<br>$=O(2^{m+n})$</p>
+<p>end of prove.</p>
+<ul>
+<li>disppath</li>
+</ul>
+<p>Disppath also use recursion to record the paths, so its time complexity is the same as the one of pathnum2.</p>
+<p>Space complexity:</p>
+<ul>
+<li>pathnum</li>
+</ul>
+<p>Since we do not need any array to save temporary data, the space complexity is $O(1)$.</p>
+<ul>
+<li>pathnum2</li>
+</ul>
+<p>It requires some space of stack to save the statuses, the space complexity is $O(2^{n+m})$.</p>
+<ul>
+<li>disppath</li>
+</ul>
+<p>It is the same as the one of pathnum2. That is $O(2^{n+m})$.</p>
+<p>The time complexity and space complexity are quite large, and they depend on how many statuses encountered when doing the recursion. Therefore, if we consider <strong>Memory Search</strong>, that is, avoid repeating the statuses that already been through, the time and space will be saved to some extent.</p>
+<h3 id="Source-code-1"><a href="#Source-code-1" class="headerlink" title="Source code"></a>Source code</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;stdio.h&gt;</span><br><span class="line">const int N &#x3D; 1e5+5;</span><br><span class="line"></span><br><span class="line">typedef struct&#123;  &#x2F;&#x2F;the struct to record the path</span><br><span class="line">    int i, j;  &#x2F;&#x2F;x and y</span><br><span class="line">&#125;PathType;</span><br><span class="line"></span><br><span class="line">PathType path[N];</span><br><span class="line">int ca; &#x2F;&#x2F;the idex of the current path</span><br><span class="line"></span><br><span class="line">int fac(int n)&#123; &#x2F;&#x2F;get the factorial of n, use for combination</span><br><span class="line">    int ans&#x3D;1;</span><br><span class="line">    while(n&gt;&#x3D;1) ans*&#x3D;n,n--;</span><br><span class="line">    return ans;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int C(int n,int m)&#123; &#x2F;&#x2F;get the combination of n and m</span><br><span class="line">    return fac(n)&#x2F;fac(n-m)&#x2F;fac(m);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int pathnum(int m, int n)&#123; &#x2F;&#x2F;calculate the number of paths directly</span><br><span class="line">    return C(m+n-2,m-1);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int pathnum2(int m,int n)&#123; &#x2F;&#x2F;the second way to get the number of paths: recursion</span><br><span class="line">    if(m&lt;1||n&lt;1) return 0;</span><br><span class="line">    if(m&#x3D;&#x3D;1&amp;&amp;n&#x3D;&#x3D;1) return 1;</span><br><span class="line">    return pathnum2(m-1,n)+pathnum(m,n-1);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void disppath(int x, int y, PathType path[], int dis)&#123; &#x2F;&#x2F;print the paths</span><br><span class="line">    if(x &#x3D;&#x3D; 1&amp;&amp; y&#x3D;&#x3D; 1) &#123; &#x2F;&#x2F;when it reaches the destination</span><br><span class="line">        path[dis].i &#x3D; x, path[dis].j &#x3D; y;</span><br><span class="line">        printf(&quot;For path No.%d:\nthe distance of this path is %d\n&quot;, ++ ca, dis);</span><br><span class="line">        for(int i &#x3D; 0; i &lt;&#x3D; dis; ++ i) printf(&quot;(%d %d)&quot;, path[i].i, path[i].j); &#x2F;&#x2F;output the path</span><br><span class="line">        puts(&quot;&quot;),puts(&quot;&quot;);</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    path[dis].i &#x3D; x, path[dis].j &#x3D; y; &#x2F;&#x2F;record current position</span><br><span class="line">    if(x &gt; 1) disppath(x-1, y, path, dis+1); &#x2F;&#x2F;recusive step</span><br><span class="line">    if(y &gt; 1) disppath(x, y-1, path, dis+1); &#x2F;&#x2F;recusive step</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main()&#123;</span><br><span class="line">    int m, n;</span><br><span class="line">    puts(&quot;Please input the location of the robot:&quot;);</span><br><span class="line">    scanf(&quot;%d%d&quot;, &amp;m, &amp;n);</span><br><span class="line">    printf(&quot;The number of paths is %d\n&quot;,pathnum(m,n));</span><br><span class="line">    disppath(m, n, path, 0);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+    </article>
+    <!-- license  -->
+    
+        <div class="license-wrapper">
+            <p>Author：<a href="rainartist.top">Artist</a>
+            <p>原文链接：<a href="rainartist.top/2020/10/15/Data-Structure/">rainartist.top/2020/10/15/Data-Structure/</a>
+            <p>发表日期：<a href="rainartist.top/2020/10/15/Data-Structure/">October 15th 2020, 11:56:57 am</a>
+            <p>更新日期：<a href="rainartist.top/2020/10/15/Data-Structure/">October 15th 2020, 1:34:37 pm</a>
+            <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href= "/2020/08/25/Art-Criticism/" title= "Art Criticism">
+                    <div class="prevTitle">Art Criticism</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!-- gitalk评论 -->
+
+    <!-- utteranc评论 -->
+
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:1443885711@qq.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/IcecreamArtist" class="iconfont-archer github" target="_blank" title=github></a>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Lab1-Recursion"><span class="toc-number">1.</span> <span class="toc-text">Lab1 Recursion</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Subject1-Solve-the-hanoi-problem-with-recursion"><span class="toc-number">1.1.</span> <span class="toc-text">Subject1. Solve the hanoi problem with recursion</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Introduction"><span class="toc-number">1.1.1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Algorithms-Specification"><span class="toc-number">1.1.2.</span> <span class="toc-text">Algorithms Specification</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Test-results"><span class="toc-number">1.1.3.</span> <span class="toc-text">Test results</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Analysis-and-Comments"><span class="toc-number">1.1.4.</span> <span class="toc-text">Analysis and Comments</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Source-code"><span class="toc-number">1.1.5.</span> <span class="toc-text">Source code</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Subject2-The-problem-of-finding-the-paths-and-the-number-of-paths"><span class="toc-number">1.2.</span> <span class="toc-text">Subject2. The problem of finding the paths and the number of paths</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Introduction-1"><span class="toc-number">1.2.1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Algorithms-Specification-1"><span class="toc-number">1.2.2.</span> <span class="toc-text">Algorithms Specification</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Test-results-1"><span class="toc-number">1.2.3.</span> <span class="toc-text">Test results</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Analysis-and-Comments-1"><span class="toc-number">1.2.4.</span> <span class="toc-text">Analysis and Comments</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Source-code-1"><span class="toc-number">1.2.5.</span> <span class="toc-text">Source code</span></a></li></ol></li></ol></li></ol>
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 4
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2020 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/15</span><a class="archive-post-title" href= "/2020/10/15/Data-Structure/" >Data Structure</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/25</span><a class="archive-post-title" href= "/2020/08/25/Art-Criticism/" >Art Criticism</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/18</span><a class="archive-post-title" href= "/2020/08/18/Wisdom-of-words/" >Wisdom of words</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/18</span><a class="archive-post-title" href= "/2020/08/18/Blogtrip/" >Blogtrip</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="Thoughts"><span class="iconfont-archer">&#xe606;</span>Thoughts</span>
+    
+        <span class="sidebar-tag-name" data-tags="Algorithm"><span class="iconfont-archer">&#xe606;</span>Algorithm</span>
+    
+        <span class="sidebar-tag-name" data-tags="Web"><span class="iconfont-archer">&#xe606;</span>Web</span>
+    
+        <span class="sidebar-tag-name" data-tags="Art"><span class="iconfont-archer">&#xe606;</span>Art</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/",
+        author: "Artist"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
+     
+    </body>
+</html>
+
+
