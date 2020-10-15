@@ -31,8 +31,9 @@
 <meta property="og:image" content="/2020/10/15/Data-Structure/2.PNG">
 <meta property="og:image" content="/2020/10/15/Data-Structure/3.PNG">
 <meta property="og:image" content="/2020/10/15/Data-Structure/4.PNG">
+<meta property="og:image" content="/2020/10/15/Data-Structure/5.jpg">
 <meta property="article:published_time" content="2020-10-15T03:56:57.000Z">
-<meta property="article:modified_time" content="2020-10-15T05:34:37.469Z">
+<meta property="article:modified_time" content="2020-10-15T09:47:56.604Z">
 <meta property="article:author" content="Artist">
 <meta property="article:tag" content="Algorithm">
 <meta name="twitter:card" content="summary">
@@ -481,17 +482,53 @@ f(m-1,n)+f(m,n-1)& \text{otherwise}
 <ul>
 <li>pathnum</li>
 </ul>
-<p>Pathnum uses combination to calculate the number of paths, since it needs to calculate factorial. The easier way to calculate factorial is simply one while loop or recursion, since it is always better to use while loop then recursion to save the space, we choose while loop, which requires $O(n)$.<br>Actually, there is another way to calculate factorial, that is, using the decomposition of <strong>Number Theory</strong>. The factorial can be expressed as a product of primes with specific powers.</p>
-<script type="math/tex; mode=display">n!=\prod_{p<=n}p^{\sum_{r=1}^{\infty}\left[ \frac{n}{p^r}\right]}</script><p>This requires $O(n)$ time for computing the primes using <strong>Linear Sieve</strong>.</p>
-<ul>
+<p>Pathnum uses combination to calculate the number of paths, since it needs to calculate factorial. The easier way to calculate factorial is simply one while loop or recursion, since it is always better to use while loop then recursion to save the space, we choose while loop, which requires $O(n)$.<br>There is another way to calculate factorial, that is, using the decomposition of <strong>Number Theory</strong>. The factorial can be expressed as a product of primes with specific powers.</p>
+<script type="math/tex; mode=display">n!=\prod_{p<=n}p^{\sum_{r=1}^{\infty}\left[ \frac{n}{p^r}\right]}</script><ul>
 <li>pathnum2</li>
 </ul>
-<p>Pathnum2 uses recursion to calculate the number of paths, the time complexity is roughly $O(2^{n+m})$.</p>
-<p>Prove:<br>From the recursion step we obtain that<br>$T(f(m,n))=T(f(m-1,n))+T(f(m,n-1))+1$</p>
-<p>Since the $m$ and $n$ have no difference, that is, the effect of the two variables is axial symmetry. We know that the path derived from f(m,n) and f(n,m) is axial symmetry. Therefore, as long as the sum of $m$ and $n$ is constant, the number of paths along to the destination is the same.</p>
-<p>So we obtain that $T(f(m,n))=T(f(n,m))$ for any $m$ and $n$.</p>
-<p>$T(f(m,n))$<br>$=T(f(m-1,n))+T(f(m,n-1))+C$<br>$=2\times T(f(m-1,n))+C$<br>$=2\times (2\times T(f(m-2,n))+C)+C$<br>$=2^2 \times T(f(m-2,n))+2\times C+C$<br>$…$<br>$=2^{m-1} \times T(f(1,n))+C+2\times C+2^2\times C+…+2^{m-2}\times C$<br>$=2^{m}\times T(f(1,n-1))+C+2\times C+2^2\times C+…+2^{m-1}\times C$<br>$…$<br>$=2^{m+n-2}\times T(f(1,1))+C+2\times C+2^2\times C+…+2^{m+n-3}\times C$<br>$=2^{m+n-2}\times C +\frac{1\times(1-2^{m+n-2})}{1-2}\times C$<br>$=(2^{m+n-1}-1)\times C$<br>$=O(2^{m+n})$</p>
-<p>end of prove.</p>
+<p>Pathnum2 uses recursion to calculate the number of paths, the time complexity is roughly $O(\frac{(n+m)!}{n!m!})$.</p>
+<p>Prove:</p>
+<p>(i) We first use programs to get the times of calculating f(m,n), and record them inside one table.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;stdio.h&gt;</span><br><span class="line">int t;</span><br><span class="line"></span><br><span class="line">int pathnum2(int m,int n)&#123;</span><br><span class="line">    t++;</span><br><span class="line">    if(m&lt;1||n&lt;1) return 0;</span><br><span class="line">    if(m&#x3D;&#x3D;1&amp;&amp;n&#x3D;&#x3D;1) return 1;</span><br><span class="line">    return pathnum2(m-1,n)+pathnum2(m,n-1);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main()&#123;</span><br><span class="line">    int m, n;</span><br><span class="line">    for(m&#x3D;1;m&lt;&#x3D;10;++m)&#123;</span><br><span class="line">        for(n&#x3D;1;n&lt;&#x3D;10;++n)&#123;</span><br><span class="line">            t&#x3D;0;pathnum2(m,n);</span><br><span class="line">            printf(&quot;%07d &quot;,t);</span><br><span class="line">        &#125;</span><br><span class="line">        puts(&quot;&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>We obtain the matrix A:<br>whose row represents $m$, and column represents $n$, and value represents how many times the recursion function is called during calculating the number of paths starting from (m,n).</p>
+<script type="math/tex; mode=display">
+\left[
+\begin{matrix}
+ 1      & 3      & 5 & 7 & 9 & \cdots      \\
+ 3      & 7      & 13 & 21 & 31 &\cdots      \\
+ 5     & 13      & 27 & 49 & 81 &\cdots      \\
+ 7      & 21      & 49 & 99 & 181 &\cdots      \\
+ 9      & 31      & 81 & 181 & 363 &\cdots      \\
+ \vdots & \vdots & \vdots & \vdots & \vdots \\
+\end{matrix}
+\right]</script><p>Observing A, we can construct a new matrix B whose values on the corresponding position are $\frac{A+1}{2}$.</p>
+<script type="math/tex; mode=display">
+\left[
+\begin{matrix}
+ 1      & 2      & 3 & 4 & 5 & \cdots      \\
+ 2      & 4      & 7 & 11 & 16 &\cdots      \\
+ 3     & 7      & 14 & 25  &\cdots      \\
+ 4      & 11      & 25 & 50  &\cdots      \\
+ 5      & 16       &\cdots      \\
+ \vdots & \vdots & \vdots & \vdots & \vdots \\
+\end{matrix}
+\right]</script><p>B has one characteristic(*): </p>
+<script type="math/tex; mode=display">b_{m,n} = b_{m-1,n}+b_{m,n-1}</script><p>Therefore, we only need to find the relation equation between $m$,$n$ and <script type="math/tex">b_{m,n}</script>, and after that we can get the representing equation between $m$,$n$ and $a_{m,n}$, as well as the time complexity.</p>
+<p>We know that <strong>Pascal triangle</strong> also has the characteristic(*). So we write the matrix of Pascal triangle(C):</p>
+<script type="math/tex; mode=display">
+\left[
+\begin{matrix}
+ 1      & 1      & 1 & 1 & 1 & \cdots      \\
+ 1      & 2      & 3 & 4 & 5 &\cdots      \\
+ 1     & 3     & 6 &  10 & 15 &\cdots      \\
+ 1      & 4      & 10 & 20 & 35  &\cdots      \\
+ 1      & 5       & 15 & 35 & 70 & \cdots      \\
+ \vdots & \vdots & \vdots & \vdots & \vdots \\
+\end{matrix}
+\right]</script><p>Compare C and B, we obtain that the only difference is that the starting values of each row and column are different. The ones of B is<script type="math/tex">1,2,3,4,...</script>, while the ones of C is <script type="math/tex">1,1,1,1,...</script>.<br>Thus, we guess that B is obtained by addition of C and another C that offset a bit, since both B and C satisfy (*).</p>
+<div style="width:70%;margin:auto"><img src="/2020/10/15/Data-Structure/5.jpg" class="" title="compare"></div>
+
+<p>By comparing C and B one by one, we obtain that C is a sum of B and another Pascal triangle.<br>Therefore, we obtain the relation equation of $m$ and $n$ and <script type="math/tex">a_{m,n}</script> using the matrix expression of Pascal triangle:</p>
+<script type="math/tex; mode=display">a_{m,n}=T(f(m,n))=2\times (\tbinom{m+n}{n}-\tbinom{m+n-2}{n-1})-1</script><p>Therefore:</p>
+<script type="math/tex; mode=display">T(f(m,n))=O(\frac{(n+m)!}{n!m!})</script><p>Completed.</p>
 <ul>
 <li>disppath</li>
 </ul>
@@ -504,13 +541,13 @@ f(m-1,n)+f(m,n-1)& \text{otherwise}
 <ul>
 <li>pathnum2</li>
 </ul>
-<p>It requires some space of stack to save the statuses, the space complexity is $O(2^{n+m})$.</p>
+<p>It requires some space of stack to save the statuses when go through recursion.</p>
 <ul>
 <li>disppath</li>
 </ul>
-<p>It is the same as the one of pathnum2. That is $O(2^{n+m})$.</p>
+<p>It is the same as the one of pathnum2.</p>
 <p>The time complexity and space complexity are quite large, and they depend on how many statuses encountered when doing the recursion. Therefore, if we consider <strong>Memory Search</strong>, that is, avoid repeating the statuses that already been through, the time and space will be saved to some extent.</p>
-<h3 id="Source-code-1"><a href="#Source-code-1" class="headerlink" title="Source code"></a>Source code</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;stdio.h&gt;</span><br><span class="line">const int N &#x3D; 1e5+5;</span><br><span class="line"></span><br><span class="line">typedef struct&#123;  &#x2F;&#x2F;the struct to record the path</span><br><span class="line">    int i, j;  &#x2F;&#x2F;x and y</span><br><span class="line">&#125;PathType;</span><br><span class="line"></span><br><span class="line">PathType path[N];</span><br><span class="line">int ca; &#x2F;&#x2F;the idex of the current path</span><br><span class="line"></span><br><span class="line">int fac(int n)&#123; &#x2F;&#x2F;get the factorial of n, use for combination</span><br><span class="line">    int ans&#x3D;1;</span><br><span class="line">    while(n&gt;&#x3D;1) ans*&#x3D;n,n--;</span><br><span class="line">    return ans;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int C(int n,int m)&#123; &#x2F;&#x2F;get the combination of n and m</span><br><span class="line">    return fac(n)&#x2F;fac(n-m)&#x2F;fac(m);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int pathnum(int m, int n)&#123; &#x2F;&#x2F;calculate the number of paths directly</span><br><span class="line">    return C(m+n-2,m-1);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int pathnum2(int m,int n)&#123; &#x2F;&#x2F;the second way to get the number of paths: recursion</span><br><span class="line">    if(m&lt;1||n&lt;1) return 0;</span><br><span class="line">    if(m&#x3D;&#x3D;1&amp;&amp;n&#x3D;&#x3D;1) return 1;</span><br><span class="line">    return pathnum2(m-1,n)+pathnum(m,n-1);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void disppath(int x, int y, PathType path[], int dis)&#123; &#x2F;&#x2F;print the paths</span><br><span class="line">    if(x &#x3D;&#x3D; 1&amp;&amp; y&#x3D;&#x3D; 1) &#123; &#x2F;&#x2F;when it reaches the destination</span><br><span class="line">        path[dis].i &#x3D; x, path[dis].j &#x3D; y;</span><br><span class="line">        printf(&quot;For path No.%d:\nthe distance of this path is %d\n&quot;, ++ ca, dis);</span><br><span class="line">        for(int i &#x3D; 0; i &lt;&#x3D; dis; ++ i) printf(&quot;(%d %d)&quot;, path[i].i, path[i].j); &#x2F;&#x2F;output the path</span><br><span class="line">        puts(&quot;&quot;),puts(&quot;&quot;);</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    path[dis].i &#x3D; x, path[dis].j &#x3D; y; &#x2F;&#x2F;record current position</span><br><span class="line">    if(x &gt; 1) disppath(x-1, y, path, dis+1); &#x2F;&#x2F;recusive step</span><br><span class="line">    if(y &gt; 1) disppath(x, y-1, path, dis+1); &#x2F;&#x2F;recusive step</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main()&#123;</span><br><span class="line">    int m, n;</span><br><span class="line">    puts(&quot;Please input the location of the robot:&quot;);</span><br><span class="line">    scanf(&quot;%d%d&quot;, &amp;m, &amp;n);</span><br><span class="line">    printf(&quot;The number of paths is %d\n&quot;,pathnum(m,n));</span><br><span class="line">    disppath(m, n, path, 0);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="Source-code-1"><a href="#Source-code-1" class="headerlink" title="Source code"></a>Source code</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;stdio.h&gt;</span><br><span class="line">const int N &#x3D; 1e5+5;</span><br><span class="line"></span><br><span class="line">typedef struct&#123;  &#x2F;&#x2F;the struct to record the path</span><br><span class="line">    int i, j;  &#x2F;&#x2F;x and y</span><br><span class="line">&#125;PathType;</span><br><span class="line"></span><br><span class="line">PathType path[N];</span><br><span class="line">int ca; &#x2F;&#x2F;the idex of the current path</span><br><span class="line"></span><br><span class="line">int fac(int n)&#123; &#x2F;&#x2F;get the factorial of n, use for combination</span><br><span class="line">    int ans&#x3D;1;</span><br><span class="line">    while(n&gt;&#x3D;1) ans*&#x3D;n,n--;</span><br><span class="line">    return ans;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int C(int n,int m)&#123; &#x2F;&#x2F;get the combination of n and m</span><br><span class="line">    return fac(n)&#x2F;fac(n-m)&#x2F;fac(m);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int pathnum(int m, int n)&#123; &#x2F;&#x2F;calculate the number of paths directly</span><br><span class="line">    return C(m+n-2,m-1);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int pathnum2(int m,int n)&#123; &#x2F;&#x2F;the second way to get the number of paths: recursion</span><br><span class="line">    if(m&lt;1||n&lt;1) return 0;</span><br><span class="line">    if(m&#x3D;&#x3D;1&amp;&amp;n&#x3D;&#x3D;1) return 1;</span><br><span class="line">    return pathnum2(m-1,n)+pathnum2(m,n-1);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void disppath(int x, int y, PathType path[], int dis)&#123; &#x2F;&#x2F;print the paths</span><br><span class="line">    if(x &#x3D;&#x3D; 1&amp;&amp; y&#x3D;&#x3D; 1) &#123; &#x2F;&#x2F;when it reaches the destination</span><br><span class="line">        path[dis].i &#x3D; x, path[dis].j &#x3D; y;</span><br><span class="line">        printf(&quot;For path No.%d:\nthe distance of this path is %d\n&quot;, ++ ca, dis);</span><br><span class="line">        for(int i &#x3D; 0; i &lt;&#x3D; dis; ++ i) printf(&quot;(%d %d)&quot;, path[i].i, path[i].j); &#x2F;&#x2F;output the path</span><br><span class="line">        puts(&quot;&quot;),puts(&quot;&quot;);</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    path[dis].i &#x3D; x, path[dis].j &#x3D; y; &#x2F;&#x2F;record current position</span><br><span class="line">    if(x &gt; 1) disppath(x-1, y, path, dis+1); &#x2F;&#x2F;recusive step</span><br><span class="line">    if(y &gt; 1) disppath(x, y-1, path, dis+1); &#x2F;&#x2F;recusive step</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main()&#123;</span><br><span class="line">    int m, n;</span><br><span class="line">    puts(&quot;Please input the location of the robot:&quot;);</span><br><span class="line">    scanf(&quot;%d%d&quot;, &amp;m, &amp;n);</span><br><span class="line">    printf(&quot;The number of paths is %d\n&quot;,pathnum(m,n));</span><br><span class="line">    disppath(m, n, path, 0);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
     </article>
     <!-- license  -->
     
@@ -518,7 +555,7 @@ f(m-1,n)+f(m,n-1)& \text{otherwise}
             <p>Author：<a href="rainartist.top">Artist</a>
             <p>原文链接：<a href="rainartist.top/2020/10/15/Data-Structure/">rainartist.top/2020/10/15/Data-Structure/</a>
             <p>发表日期：<a href="rainartist.top/2020/10/15/Data-Structure/">October 15th 2020, 11:56:57 am</a>
-            <p>更新日期：<a href="rainartist.top/2020/10/15/Data-Structure/">October 15th 2020, 1:34:37 pm</a>
+            <p>更新日期：<a href="rainartist.top/2020/10/15/Data-Structure/">October 15th 2020, 5:47:56 pm</a>
             <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
     
@@ -815,7 +852,22 @@ jsonContent:
     
         <script src="/scripts/share.js" async></script>    
      
-    </body>
+    <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+</body>
 </html>
 
 
